@@ -1,2 +1,2 @@
 # programiranje-test-case-generators
-Repozitorij s programi za generiranje rešitev
+Repozitorij z nalogami (sistem TOMO) in programi za generiranje rešitev.
