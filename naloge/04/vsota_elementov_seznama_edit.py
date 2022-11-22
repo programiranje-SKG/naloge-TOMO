@@ -5,33 +5,25 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Največji element
-# =====================================================================@032860=
-# Napiši program, ki izpiše največji element seznama. Seznam je spet lahko podan kar v
-# programu; ni potrebno, da ga vnaša uporabnik. Seznam naj bo podan kar na začetku programa v spremenjivki `s`,
+# Vsota elementov seznama
+# =====================================================================@032856=
+# Napiši program, ki izpiše vsoto elementov seznama. Seznam naj bo podan kar na začetku programa v spremenjivki `s`,
 # na koncu pa naj program izpiše zgolj rešitev, brez olepšav.
-# 
-# Namig: podobno, kot si si prej zapomnil vsoto dosedanjih elementov, si moraš zdaj zapomniti
-# največji element doslej. Pri računanju vsote si za začetno vrednost vsote seveda izbral 0. Tu 0
-# ni nujno dobra izbira, saj je največji element morda negativen. Kot začetno vrednost lahko
-# uporabiš `None` ali pa vzameš prvi element seznama; dobiš ga z `s[0]`.
-# 
 # Prva vrstica tvojega programa naj bo:
 # 
 #     s = [5, 8, 3, 6, 0, 1]
 # 
-# Program naj na koncu preprosto izpiše največji element:
+# Program naj na koncu preprosto izpiše vsoto:
 # 
-#     8
+#     23
 # -----------------------------------------------------------------------------
 # s = [5, 8, 3, 6, 0, 1]
 # =============================================================================
 s = [78, 11, 32, 97, 10, 94, 13, 41, 26, 72, 62, 53]
-najvecji = None
-for x in s:
-    if najvecji is None or x > najvecji:
-        najvecji = x
-print(najvecji)
+vsota = 0
+for e in s:
+    vsota += e
+print(vsota)
 
 Check.part()
 resitev = Check.current_part['solution'].split('\n')
@@ -48,17 +40,15 @@ def first_line(test):
     return "s = " + str(test)
 
 # test cases
-test_cases = [[6, 40, 58, 53, 77, 7, 71, 72, 99],
+test_cases = [[6, 40, 58, 53, 77, 7, 71, 72, 84],
               [47, 84, 5, 29, 44, 48, 73, 34, 24, 34, 63],
               [100, 33, 59, 19, 55, 26, 24, 70, 7, 77, 47, 99, 34, 19, 58],
               [93, 69, 33, 6, 24, 15, 11, 14, 80, 58, 87, 20, 62],
               [78, 11, 32, 97, 10, 94, 13, 41, 26, 72, 62, 53]]
-
-solutions = [99, 84, 100, 93, 97]
 # ===============================================
 # ================= black magic =================
 
-for i, test_case in enumerate(test_cases):
+for test_case in test_cases:
     input_line = first_line(test_case)
 
     # replace first line in solution
@@ -66,9 +56,10 @@ for i, test_case in enumerate(test_cases):
     # add first line as declaration of list
     test_program = [input_line] + program
     Check.run(test_program, dict())
-    Check.output(Check.current_part['solution'], [
-        str(solutions[i])
-    ])
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(sum(test_case))
+        ])
 # ===============================================
 
 
@@ -543,7 +534,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12284
+        'problem': 12282
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -555,7 +546,7 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12284,
+        'id': 12282,
         'problem_set': 2536
     }
 

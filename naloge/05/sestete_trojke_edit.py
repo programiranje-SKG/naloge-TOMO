@@ -5,51 +5,61 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Največji absolutist
-# =====================================================================@032862=
-# Napiši program, ki vrne največje število po absolutni vrednosti (-8 je po absolutni vrednosti
-# večje od -2 in od 5). Seznam naj bo podan kar na začetku programa v spremenjivki `s`,
-# na koncu pa naj program izpiše zgolj rešitev, brez olepšav.
+# Seštete trojke
+# =====================================================================@032873=
+# Napiši program, ki prejme seznam trojk in vrne `True`, če za vse trojke velja,
+# da je tretji element vsota prvih dveh; v nasprotnem primeru vrne `False`. Vhod
+# se bo nahajal v prvi vrstici v spremenljivki `vhod`.
 # 
-# Prva vrstica tvojega programa naj bo:
+# Primer:
 # 
-#     s = [5, -8, 3, -6, 0, -1]
+#     vhod = [(3, 5, 8), (2, 6, 9), (1, 1, 2), (10, 5, 15)]
 # 
-# Program naj na koncu preprosto izpiše absolutno največji element:
+# Program bo tako izpisal `False`, ker je v njem nepravilna trojka: 2 + 6 ni
+# enako 9.
 # 
-#     8
+#     False
 # -----------------------------------------------------------------------------
-# s = [5, -8, 3, -6, 0, -1]
+# vhod = [(3, 5, 8), (2, 6, 9), (1, 1, 2), (10, 5, 15)]
 # =============================================================================
-s = [78, 11, -32, 97, 10, 94, 13, 41, -26, 72, 62, 53]
-najvecji = None
-for x in s:
-    if najvecji is None or abs(x) > abs(najvecji):
-        najvecji = x
-print(najvecji)
+vhod = [(9, 5, 14), (1, 4, 5), (8, 2, 10), (1, 1, 2), (3, 8, 11)]
+for x, y, z in vhod:
+    if x + y != z:
+        print(False)
+        break
+else:
+    print(True)
 
 Check.part()
 resitev = Check.current_part['solution'].split('\n')
 sez_str = resitev[0]
-if 's=[' not in sez_str.replace(" ", ""):
-    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko s.\n"
+if 'vhod=[' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko vhod.\n"
                 "Na primer:\n"
-                "s = [5, 8, -3, 6, 0, -1]")
+                'vhod = [(3, 5, 8), (2, 6, 9), (1, 1, 2), (10, 5, 15)]')
 program = resitev[1:]
+
 
 # ===============================================
 # ================ Test cases ===================
 def first_line(test):
-    return "s = " + str(test)
+    return "vhod = " + str(test)
+
 
 # test cases
-test_cases = [[6, -40, 58, 53, 77, -7, 71, -72, -99],
-              [47, 84, -5, 29, 44, -48, 73, 34, 24, -34, 63],
-              [-33, 59, 19, 55, 26, -24, 70, 7, 77, -47, 99, 34, -19, 58],
-              [-91, 69, -33, 6, 24, 15, -11, 14, 80, -58, 87, 20, 62],
-              [78, 11, -32, 97, 10, 94, 13, 41, -26, 72, 62, 53]]
 
-solutions = [-99, 84, 99, -91, 97]
+
+test_cases = [[(2, 1, 3), (5, 1, 6), (2, 9, 11), (7, 7, 14), (4, 4, 8)],
+              [(5, 3, 8), (9, 2, 7), (3, 6, 9), (1, 7, 8), (1, 9, 10)],
+              [(1, 4, 5), (1, 4, 5), (5, 1, 6), (4, 9, 13), (4, 8, 12)],
+              [(9, 8, 17), (1, 9, 9), (2, 8, 10), (8, 2, 10), (8, 2, 10)],
+              [(8, 2, 8), (2, 6, 8), (9, 6, 15), (7, 8, 15), (3, 1, 4)],
+              [(6, 7, 13), (5, 3, 2), (7, 2, 9), (1, 3, 4), (5, 6, 11)],
+              [(6, 7, 13), (7, 5, 12), (4, 6, 10), (4, 7, 11), (8, 1, 9)],
+              [(9, 5, 14), (1, 4, 5), (8, 2, 10), (1, 1, 2), (3, 8, 11)]]
+
+solutions = [True, False, True, False, False, False, True, True]
+
 # ===============================================
 # ================= black magic =================
 
@@ -61,9 +71,10 @@ for i, test_case in enumerate(test_cases):
     # add first line as declaration of list
     test_program = [input_line] + program
     Check.run(test_program, dict())
-    Check.output(Check.current_part['solution'], [
-        str(solutions[i])
-    ])
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
 # ===============================================
 
 
@@ -538,7 +549,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12286
+        'problem': 12293
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -550,8 +561,8 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12286,
-        'problem_set': 2536
+        'id': 12293,
+        'problem_set': 2537
     }
 
 def _validate_current_file():

@@ -5,47 +5,58 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Ajavost nizov
-# =====================================================================@032861=
-# Napiši program, ki mu uporabnik poda niz in računalnik mu pove, koliko malih črk "a" je v njem.
-# niz naj bo podan kar na začetku programa v spremenjivki `niz`, na koncu pa naj program izpiše
-# zgolj rešitev, brez olepšav.
+# Ujemanje črk
+# =====================================================================@032874=
+# Napiši program, ki prejme seznam z dvema besedama in vrne število istoležnih črk, v
+# katerih se ujemata. `TRAVNIK` in `PRAVNIK` se v šestih, `MLEKO` in `MREŽA` v dveh, `OČALA` in
+# `MARKO` pa v nobeni (obe imata sicer O in A, vendar ne na istih mestih). Besedi nista nujno
+# enako dolgi; `PAV` in `KRVAVICA` se ujemata v eni črki, `TRAVNIK` in `RAVNIK` pa v nobeni.
+# Podatki bodo podani v prvi vrstici v spremenljivki `vhod`, ki jih nato v drugi vrstici lahko
+# razpakiraš v posamezne besede
 # 
-# Prva vrstica tvojega programa naj bo:
+#     vhod = ["TRAVNIK", "PRAVNIK"]
+#     b1, b2 = vhod
 # 
-#     niz = "Tole je moj niz, v katerem imam 3 a-je"
+# Izhod naj bo število ujemanje:
 # 
-# Program naj na koncu preprosto izpiše število a-jev:
-# 
-#     3
+#     6
 # -----------------------------------------------------------------------------
-# niz = "Tole je moj niz, v katerem imam 3 a-je"
+# vhod = ["TRAVNIK", "PRAVNIK"]
+# b1, b2 = vhod
 # =============================================================================
-niz = "AaaAA"
-stevec = 0
-for crka in niz:
-    if crka == 'a':
-        stevec += 1
-print(stevec)
+vhod = ['BRATI', 'AMERIKA']
+b1, b2 = vhod
+uj = 0
+for c1, c2 in zip(b1, b2):
+    if c1 == c2:
+        uj += 1
+print(uj)
 
 Check.part()
 resitev = Check.current_part['solution'].split('\n')
 sez_str = resitev[0]
-if 'niz=' not in sez_str.replace(" ", ""):
-    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko niz.\n"
+if 'vhod=[' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko vhod.\n"
                 "Na primer:\n"
-                "niz = [5, 8, 3, 6, 0, 1]")
+                'vhod = ["TRAVNIK", "PRAVNIK"]')
 program = resitev[1:]
+
 
 # ===============================================
 # ================ Test cases ===================
 def first_line(test):
-    return "niz = " + str(test)
+    return "vhod = " + str(test)
+
 
 # test cases
-test_cases = ['"abeceda"', '"abracadabra"', '"informatika"', '"programiranje"', '"nic"', '"AaaAA"']
 
-solutions = [2, 5, 2, 2, 0, 2]
+
+test_cases = [['DANES', 'AVSTRALIJA'], ['DARILO', 'DOSEGLJIV'], ['ARGENTINEC', 'ARGENTINKA'], ['ČAO', 'ALBUM'],
+           ['DELATI', 'AVSTRIJA'], ['DEVET', 'DOVOLJ'], ['DEŽEVATI', 'ADIJO'], ['BRATI', 'AMERIKA']]
+
+
+solutions = [0, 1, 8, 0, 1, 2, 0, 1]
+
 # ===============================================
 # ================= black magic =================
 
@@ -57,9 +68,10 @@ for i, test_case in enumerate(test_cases):
     # add first line as declaration of list
     test_program = [input_line] + program
     Check.run(test_program, dict())
-    Check.output(Check.current_part['solution'], [
-        str(solutions[i])
-    ])
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
 # ===============================================
 
 
@@ -534,7 +546,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12285
+        'problem': 12294
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -546,8 +558,8 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12285,
-        'problem_set': 2536
+        'id': 12294,
+        'problem_set': 2537
     }
 
 def _validate_current_file():

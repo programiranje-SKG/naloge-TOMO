@@ -5,28 +5,33 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Najmanjši pozitivist
-# =====================================================================@032863=
-# Napiši program, ki vrne najmanjše pozitivno število v seznamu. Negativna števila in 0 naj
-# prezira. Če v seznamu ni pozitivnih števil, naj vrne `None`. Seznam naj bo podan kar na začetku
-# programa v spremenjivki `s`, na koncu pa naj program izpiše zgolj rešitev, brez olepšav.
+# Največji element
+# =====================================================================@032860=
+# Napiši program, ki izpiše največji element seznama. Seznam je spet lahko podan kar v
+# programu; ni potrebno, da ga vnaša uporabnik. Seznam naj bo podan kar na začetku programa v spremenjivki `s`,
+# na koncu pa naj program izpiše zgolj rešitev, brez olepšav.
+# 
+# Namig: podobno, kot si si prej zapomnil vsoto dosedanjih elementov, si moraš zdaj zapomniti
+# največji element doslej. Pri računanju vsote si za začetno vrednost vsote seveda izbral 0. Tu 0
+# ni nujno dobra izbira, saj je največji element morda negativen. Kot začetno vrednost lahko
+# uporabiš `None` ali pa vzameš prvi element seznama; dobiš ga z `s[0]`.
 # 
 # Prva vrstica tvojega programa naj bo:
 # 
-#     s = [5, -8, 3, -6, 0, -1]
+#     s = [5, 8, 3, 6, 0, 1]
 # 
-# Program naj na koncu preprosto izpiše najmanjše pozitivno število:
+# Program naj na koncu preprosto izpiše največji element:
 # 
-#     3
+#     8
 # -----------------------------------------------------------------------------
-# s = [5, -8, 3, -6, 0, -1]
+# s = [5, 8, 3, 6, 0, 1]
 # =============================================================================
-s = [78, 11, -32, 97, 10, 94, 13, 41, -26, 72, 62, 53]
-naj = None
+s = [78, 11, 32, 97, 10, 94, 13, 41, 26, 72, 62, 53]
+najvecji = None
 for x in s:
-    if x > 0 and (naj is None or x < naj):
-        naj = x
-print(naj)
+    if najvecji == None or x > najvecji:
+        najvecji = x
+print(najvecji)
 
 Check.part()
 resitev = Check.current_part['solution'].split('\n')
@@ -34,7 +39,7 @@ sez_str = resitev[0]
 if 's=[' not in sez_str.replace(" ", ""):
     Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko s.\n"
                 "Na primer:\n"
-                "s = [5, 8, -3, 6, 0, -1]")
+                "s = [5, 8, 3, 6, 0, 1]")
 program = resitev[1:]
 
 # ===============================================
@@ -43,13 +48,13 @@ def first_line(test):
     return "s = " + str(test)
 
 # test cases
-test_cases = [[6, -40, 58, 53, 77, -7, 71, -72, -99],
-              [47, 84, -5, 29, 44, -48, 73, 34, 24, -34, 63, 1],
-              [-33, 59, 19, 55, 26, -24, 70, 7, 77, -47, 99, 34, -19, 58],
-              [-91, 69, -33, 6, 24, 15, -11, 14, 80, -58, 87, 20, 62],
-              [78, 11, -32, 97, 10, 94, 13, 41, -26, 72, 62, 53]]
+test_cases = [[6, 40, 58, 53, 77, 7, 71, 72, 99],
+              [47, 84, 5, 29, 44, 48, 73, 34, 24, 34, 63],
+              [100, 33, 59, 19, 55, 26, 24, 70, 7, 77, 47, 99, 34, 19, 58],
+              [93, 69, 33, 6, 24, 15, 11, 14, 80, 58, 87, 20, 62],
+              [78, 11, 32, 97, 10, 94, 13, 41, 26, 72, 62, 53]]
 
-solutions = [6, 1, 7, 6, 10]
+solutions = [99, 84, 100, 93, 97]
 # ===============================================
 # ================= black magic =================
 
@@ -61,9 +66,10 @@ for i, test_case in enumerate(test_cases):
     # add first line as declaration of list
     test_program = [input_line] + program
     Check.run(test_program, dict())
-    Check.output(Check.current_part['solution'], [
-        str(solutions[i])
-    ])
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
 # ===============================================
 
 
@@ -538,7 +544,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12287
+        'problem': 12284
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -550,7 +556,7 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12287,
+        'id': 12284,
         'problem_set': 2536
     }
 

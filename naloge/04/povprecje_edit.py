@@ -5,28 +5,32 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Liha števila
-# =====================================================================@032866=
-# Napiši program, ki prejme seznam števil in vrne `True`, če je med njimi vsaj
-# eno liho, in `False`, če ni. Seznam naj bo podan kar na začetku programa v spremenjivki `s`,
+# Povprečje
+# =====================================================================@032864=
+# Napiši program, ki kot seznam prejme seznam tež skupine državljanov in
+# izračuna poprečno težo, zaokroženo na dve decimalki. Če je seznam prazen, je
+# poprečna teža 0. Seznam naj bo podan kar na začetku programa v spremenjivki `s`,
 # na koncu pa naj program izpiše zgolj rešitev, brez olepšav.
 # 
 # Prva vrstica tvojega programa naj bo:
 # 
-#     s = [5, 2, 3, 8, 1, 12]
+#     s = [32, 64, 105, 76, 53, 83]
 # 
-# Program naj na koncu preprosto prikaže rešitev:
+# Program naj na koncu preprosto izpiše rezultat:
 # 
-#     True
+#     68.83
 # -----------------------------------------------------------------------------
-# s = [5, 2, 3, 8, 1, 12]
+# s = [32, 64, 105, 76, 53, 83]
 # =============================================================================
-s = [2, 82, 85, 95, 28, 19, 102, 98, 79, 68, 14, 1]
-vsaj_eno_liho = False
+s = []
+vsota = 0
 for e in s:
-    if e % 2 == 1:
-        vsaj_eno_liho = True
-print(vsaj_eno_liho)
+    if e != 0:
+        vsota += e
+if not s:
+    print(0)
+else:
+    print(round(vsota / len(s), 2))
 
 Check.part()
 resitev = Check.current_part['solution'].split('\n')
@@ -37,20 +41,23 @@ if 's=[' not in sez_str.replace(" ", ""):
                 "s = [5, 8, -3, 6, 0, -1]")
 program = resitev[1:]
 
+
 # ===============================================
 # ================ Test cases ===================
 def first_line(test):
     return "s = " + str(test)
 
-# test cases
-test_cases = [[12, 66, 80, 6, 80, 44],
-              [47, 63, 5, 41, 11, 27, 67, 91],
-              [14, 16, 62, 78, 62, 8, 12],
-              [88, 78, 32, 60, 84, 54, 18, 38, 6, 90, 22],
-              [71, 34, 25, 8, 83, 98, 37],
-              [2, 82, 85, 95, 28, 19, 102, 98, 79, 68, 14, 1]]
 
-solutions = [False, True, False, False, True, True]
+# test cases
+test_cases = [[123, 116, 58, 92, 113, 44, 66, 94, 114],
+              [20, 124, 91, 105, 101, 123, 72, 127, 127, 81],
+              [26, 100, 31, 122, 77, 80, 110, 82, 89],
+              [87, 85, 119, 124, 92, 78, 59, 66, 89],
+              [121, 95, 38, 21, 72, 116, 61],
+              [92, 79, 71, 98, 107, 66, 113, 113, 82, 81, 34, 54, 55],
+              []]
+
+solutions = [91.11, 97.1, 79.67, 88.78, 74.86, 80.38, 0]
 # ===============================================
 # ================= black magic =================
 
@@ -62,33 +69,42 @@ for i, test_case in enumerate(test_cases):
     # add first line as declaration of list
     test_program = [input_line] + program
     Check.run(test_program, dict())
-    Check.output(Check.current_part['solution'], [
-        str(solutions[i])
-    ])
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
+# ===============================================
 
 
-# =====================================================================@032867=
-# Napiši program, ki prejme seznam števil ter vrne `True`, če so vsa liha, in `False`, če
-# niso. Če je seznam prazen, naj funkcija vrne `True`, saj v njem ni ne-lihih števil.
-# Seznam naj bo podan kar na začetku programa v spremenjivki `s`, na koncu pa naj program
-# izpiše zgolj rešitev, brez olepšav.
+# =====================================================================@032865=
+# Napiši program, ki prejme podoben seznam kot v prejšnji nalogi, vendar računa poprečje brez
+# najtežjega in najlažjega, zaokroženo na dve decimalki.  Če si mesto najtežjega ali najlažjega
+# deli več ljudi, naj odstrani le po enega. Seznam naj bo podan kar na začetku programa v
+# spremenjivki `s`, na koncu pa naj program izpiše zgolj rešitev, brez olepšav.
 # 
 # Prva vrstica tvojega programa naj bo:
 # 
-#     s = [5, 3, 3, 7, 1, 13]
+#     s = [32, 64, 105, 76, 53, 83]
 # 
-# Program naj na koncu preprosto prikaže rešitev:
+# Program naj na koncu preprosto izpiše rezultat:
 # 
-#     True
+#     69.0
 # -----------------------------------------------------------------------------
-# s = [5, 3, 3, 7, 1, 13]
+# s = [32, 64, 105, 76, 53, 83]
 # =============================================================================
-s = []
-sama_liha = True
-for e in s:
-    if e % 2 == 0:
-        sama_liha = False
-print(sama_liha)
+s = [1, 2, 3, 4, 4]
+if len(s) <= 2:
+    print(0)
+else:
+    najm = najv = s[0]
+    vsota = 0
+    for e in s:
+        if e < najm:
+            najm = e
+        elif e > najv:
+            najv = e
+        vsota += e
+    print(round((vsota - najm - najv) / (len(s) - 2), 2))
 
 Check.part()
 resitev = Check.current_part['solution'].split('\n')
@@ -99,21 +115,25 @@ if 's=[' not in sez_str.replace(" ", ""):
                 "s = [5, 8, -3, 6, 0, -1]")
 program = resitev[1:]
 
+
 # ===============================================
 # ================ Test cases ===================
 def first_line(test):
     return "s = " + str(test)
 
-# test cases
-test_cases = [[12, 66, 89, 6, 80, 44],
-              [47, 63, 5, 41, 11, 27, 67, 91],
-              [15, 17, 67, 77, 62, 8, 13],
-              [89, 78, 37, 60, 85, 54, 17, 38, 6, 90, 23],
-              [71, 35, 25, 7, 83, 99, 37],
-              [1, 83, 85, 95, 27, 19, 103, 97, 79, 69, 13, 1],
-              []]
 
-solutions = [False, True, False, False, True, True, True]
+# test cases
+test_cases = [[21, 117, 34, 53, 92, 85, 107],
+              [81, 45, 85, 91, 34, 21, 31, 94, 77, 53, 83, 122],
+              [125, 49, 58, 45, 93, 84, 105, 47, 56, 64, 26, 111, 61],
+              [23, 124, 111, 110, 72, 55, 112, 95, 63, 93, 37, 100],
+              [24, 62, 40, 43, 108, 125, 119, 128, 100, 28, 117],
+              [78, 28, 109, 84, 73, 94, 46, 35],
+              [],
+              [1, 2],
+              [1, 2, 3, 4, 4]]
+
+solutions = [74.2, 67.4, 70.27, 84.8, 82.44, 68.33, 0, 0, 3.0]
 # ===============================================
 # ================= black magic =================
 
@@ -125,9 +145,10 @@ for i, test_case in enumerate(test_cases):
     # add first line as declaration of list
     test_program = [input_line] + program
     Check.run(test_program, dict())
-    Check.output(Check.current_part['solution'], [
-        str(solutions[i])
-    ])
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
 
 
 # # =====================================================================@000000=
@@ -601,7 +622,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12289
+        'problem': 12288
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -613,7 +634,7 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12289,
+        'id': 12288,
         'problem_set': 2536
     }
 

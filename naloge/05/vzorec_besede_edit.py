@@ -5,59 +5,57 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Poprečje
-# =====================================================================@032864=
-# Napiši program, ki kot seznam prejme seznam tež skupine državljanov in
-# izračuna poprečno težo, zaokroženo na dve decimalki. Če je seznam prazen, je
-# poprečna teža 0. Seznam naj bo podan kar na začetku programa v spremenjivki `s`,
-# na koncu pa naj program izpiše zgolj rešitev, brez olepšav.
+# Vzorec besede
+# =====================================================================@032875=
+# Recimo, da rešujemo križanko. Imamo besedo s petimi črkami, pri čemer vemo, da je prva M,
+# druga L in peta O. Takšen vzorec bomo predstavili z nizom "ML..O". Iskana beseda bi lahko bila,
+# recimo, MLEKO. Napiši program, ki izpiše `True`, če se podana beseda ujema z
+# vzorcem. Vhod predstavlja seznam, ki ima na prvem mestu vzorec, na drugem pa besedo. Podatke nato lahko v drugi
+# vrstici razpakiramo:
 # 
-# Prva vrstica tvojega programa naj bo:
+#     vhod = ["ML..O", "MLEKO"]
+#     vzorec, beseda = vhod
 # 
-#     s = [32, 64, 105, 76, 53, 83]
+# Izhod v tem primeru bo:
 # 
-# Program naj na koncu preprosto izpiše rezultat:
-# 
-#     68.83
+#     True
 # -----------------------------------------------------------------------------
-# s = [32, 64, 105, 76, 53, 83]
+# vhod = ["ML..O", "MLEKO"]
+# vzorec, beseda = vhod
 # =============================================================================
-s = []
-vsota = 0
-for e in s:
-    if e != 0:
-        vsota += e
-if not s:
-    print(0)
+vhod = ['B...', 'AMERIKA']
+vzorec, beseda = vhod
+for b, v in zip(beseda, vzorec):
+    if b != v and v != ".":
+        print(False)
+        break
 else:
-    print(round(vsota / len(s), 2))
+    print(len(beseda) == len(vzorec))
 
 Check.part()
 resitev = Check.current_part['solution'].split('\n')
 sez_str = resitev[0]
-if 's=[' not in sez_str.replace(" ", ""):
-    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko s.\n"
+if 'vhod=[' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko vhod.\n"
                 "Na primer:\n"
-                "s = [5, 8, -3, 6, 0, -1]")
+                'vhod = ["ML..O", "MLEKO"]')
 program = resitev[1:]
 
 
 # ===============================================
 # ================ Test cases ===================
 def first_line(test):
-    return "s = " + str(test)
+    return "vhod = " + str(test)
 
 
 # test cases
-test_cases = [[123, 116, 58, 92, 113, 44, 66, 94, 114],
-              [20, 124, 91, 105, 101, 123, 72, 127, 127, 81],
-              [26, 100, 31, 122, 77, 80, 110, 82, 89],
-              [87, 85, 119, 124, 92, 78, 59, 66, 89],
-              [121, 95, 38, 21, 72, 116, 61],
-              [92, 79, 71, 98, 107, 66, 113, 113, 82, 81, 34, 54, 55],
-              []]
 
-solutions = [91.11, 97.1, 79.67, 88.78, 74.86, 80.38, 0]
+
+test_cases = [['A..TR...JA', 'AVSTRALIJA'], ['D.....J.V', 'DARILO'], ['A....TINEC', 'ARGENTINEC'], ['Č..', 'ČAO'],
+              ['D....I', 'DELATI'], ['D...T', 'DOVOLJ'], ['DEŽE....', 'DEŽEVATI'], ['B...', 'AMERIKA']]
+
+solutions = [True, False, True, True, True, False, True, False]
+
 # ===============================================
 # ================= black magic =================
 
@@ -69,70 +67,73 @@ for i, test_case in enumerate(test_cases):
     # add first line as declaration of list
     test_program = [input_line] + program
     Check.run(test_program, dict())
-    Check.output(Check.current_part['solution'], [
-        str(solutions[i])
-    ])
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
 # ===============================================
 
 
-# =====================================================================@032865=
-# Napiši program, ki prejme podoben seznam kot v prejšnji nalogi, vendar računa poprečje brez
-# najtežjega in najlažjega, zaokroženo na dve decimalki.  Če si mesto najtežjega ali najlažjega
-# deli več ljudi, naj odstrani le po enega. Seznam naj bo podan kar na začetku programa v
-# spremenjivki `s`, na koncu pa naj program izpiše zgolj rešitev, brez olepšav.
+# =====================================================================@032876=
+# Napiši program, ki dobi vzorec, kakršne smo videli v prejšnji nalogi in
+# seznam besed. Izpisati mora prvo besedo iz seznama, ki se ujema z vzorcem. Če se ne
+# ujema nobena, izpiše `None`. Podatki se nahajajo v spremenljivki `podatki`, ki je
+# definirana v prvi vrstici. Nato jo lahko odpakiraš na že znan način.
 # 
-# Prva vrstica tvojega programa naj bo:
+#     vhod = ['D...LJ', ["AVSTRALIJA", "VESELJE", "RACUNALNIK", "DOVOLJ", "PREVEC"]]
+#     vzorec, seznam = vhod
 # 
-#     s = [32, 64, 105, 76, 53, 83]
+# Izhod bo tako prva beseda, ki se ujema, oz. `None`, če ni ujemanja:
 # 
-# Program naj na koncu preprosto izpiše rezultat:
-# 
-#     69.0
+#     DOVOLJ
 # -----------------------------------------------------------------------------
-# s = [32, 64, 105, 76, 53, 83]
+# vhod = ['D...LJ', ["AVSTRALIJA", "VESELJE", "RACUNALNIK", "DOVOLJ", "PREVEC"]]
+# vzorec, besede = vhod
 # =============================================================================
-s = [1, 2, 3, 4, 4]
-if len(s) <= 2:
-    print(0)
+vhod = ['PR....', ['AVSTRALIJA', 'VESELJE', 'RACUNALNIK', 'DOVOLJ', 'PREVEC']]
+vzorec, besede = vhod
+for beseda in besede:
+    se_ujema = True
+    for b, v in zip(beseda, vzorec):
+        if b != v and v != ".":
+            se_ujema = False
+            break
+    else:
+        se_ujema = (len(beseda) == len(vzorec))
+    if se_ujema:
+        print(beseda)
+        break
 else:
-    najm = najv = s[0]
-    vsota = 0
-    for e in s:
-        if e < najm:
-            najm = e
-        elif e > najv:
-            najv = e
-        vsota += e
-    print(round((vsota - najm - najv) / (len(s) - 2), 2))
+    print(None)
 
 Check.part()
 resitev = Check.current_part['solution'].split('\n')
 sez_str = resitev[0]
-if 's=[' not in sez_str.replace(" ", ""):
-    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko s.\n"
+if 'vhod=[' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko vhod.\n"
                 "Na primer:\n"
-                "s = [5, 8, -3, 6, 0, -1]")
+                'vhod = ["D...LJ", ["AVSTRALIJA", "VESELJE", "RACUNALNIK", "DOVOLJ", "PREVEC"]]')
 program = resitev[1:]
 
 
 # ===============================================
 # ================ Test cases ===================
 def first_line(test):
-    return "s = " + str(test)
+    return "vhod = " + str(test)
 
 
 # test cases
-test_cases = [[21, 117, 34, 53, 92, 85, 107],
-              [81, 45, 85, 91, 34, 21, 31, 94, 77, 53, 83, 122],
-              [125, 49, 58, 45, 93, 84, 105, 47, 56, 64, 26, 111, 61],
-              [23, 124, 111, 110, 72, 55, 112, 95, 63, 93, 37, 100],
-              [24, 62, 40, 43, 108, 125, 119, 128, 100, 28, 117],
-              [78, 28, 109, 84, 73, 94, 46, 35],
-              [],
-              [1, 2],
-              [1, 2, 3, 4, 4]]
 
-solutions = [74.2, 67.4, 70.27, 84.8, 82.44, 68.33, 0, 0, 3.0]
+
+test_cases = [
+    ["D...LJ", ["AVSTRALIJA", "VESELJE", "RACUNALNIK", "DOVOLJ", "PREVEC"]],
+    ["R.T", ["AVSTRALIJA", "VESELJE", "RACUNALNIK", "DOVOLJ", "PREVEC"]],
+    ["A....ALIJA", ["AVSTRALIJA", "VESELJE", "RACUNALNIK", "DOVOLJ", "PREVEC"]],
+    ["PR....", ["AVSTRALIJA", "VESELJE", "RACUNALNIK", "DOVOLJ", "PREVEC"]]
+]
+
+solutions = ["DOVOLJ", None, "AVSTRALIJA", "PREVEC"]
+
 # ===============================================
 # ================= black magic =================
 
@@ -144,9 +145,11 @@ for i, test_case in enumerate(test_cases):
     # add first line as declaration of list
     test_program = [input_line] + program
     Check.run(test_program, dict())
-    Check.output(Check.current_part['solution'], [
-        str(solutions[i])
-    ])
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
+# ===============================================
 
 
 # # =====================================================================@000000=
@@ -620,7 +623,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12288
+        'problem': 12295
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -632,8 +635,8 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12288,
-        'problem_set': 2536
+        'id': 12295,
+        'problem_set': 2537
     }
 
 def _validate_current_file():

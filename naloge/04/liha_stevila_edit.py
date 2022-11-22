@@ -5,62 +5,52 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Seštete trojke
-# =====================================================================@000000=
-# Napiši program, ki prejme seznam trojk in vrne `True`, če za vse trojke velja,
-# da je tretji element vsota prvih dveh; v nasprotnem primeru vrne `False`. Vhod
-# se bo nahajal v prvi vrstici v spremenljivki `vhod`.
-#
-# Primer:
-#
-#     vhod = [(3, 5, 8), (2, 6, 9), (1, 1, 2), (10, 5, 15)]
-#
-# Program bo tako izpisal `False`, ker je v njem nepravilna trojka: 2 + 6 ni
-# enako 9.
-#
-#     False
-#
+# Liha števila
+# =====================================================================@032866=
+# Napiši program, ki prejme seznam števil in vrne `True`, če je med njimi vsaj
+# eno liho, in `False`, če ni. Seznam naj bo podan kar na začetku programa v spremenjivki `s`,
+# na koncu pa naj program izpiše zgolj rešitev, brez olepšav.
+# 
+# Prva vrstica tvojega programa naj bo:
+# 
+#     s = [5, 2, 3, 8, 1, 12]
+# 
+# Program naj na koncu preprosto prikaže rešitev:
+# 
+#     True
 # -----------------------------------------------------------------------------
-# vhod = [(3, 5, 8), (2, 6, 9), (1, 1, 2), (10, 5, 15)]
+# s = [5, 2, 3, 8, 1, 12]
 # =============================================================================
-vhod = [(3, 5, 8), (2, 6, 9), (1, 1, 2), (10, 5, 15)]
-for x, y, z in vhod:
-    if x + y != z:
-        print(False)
-        break
-else:
-    print(True)
+s = [2, 82, 85, 95, 28, 19, 102, 98, 79, 68, 14, 1]
+vsaj_eno_liho = False
+for e in s:
+    if e % 2 == 1:
+        vsaj_eno_liho = True
+print(vsaj_eno_liho)
 
 Check.part()
 resitev = Check.current_part['solution'].split('\n')
 sez_str = resitev[0]
-if 'vhod=[' not in sez_str.replace(" ", ""):
-    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko vhod.\n"
+if 's=[' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko s.\n"
                 "Na primer:\n"
-                'vhod = [(3, 5, 8), (2, 6, 9), (1, 1, 2), (10, 5, 15)]')
+                "s = [5, 8, -3, 6, 0, -1]")
 program = resitev[1:]
-
 
 # ===============================================
 # ================ Test cases ===================
 def first_line(test):
-    return "vhod = " + str(test)
-
+    return "s = " + str(test)
 
 # test cases
+test_cases = [[12, 66, 80, 6, 80, 44],
+              [47, 63, 5, 41, 11, 27, 67, 91],
+              [14, 16, 62, 78, 62, 8, 12],
+              [88, 78, 32, 60, 84, 54, 18, 38, 6, 90, 22],
+              [71, 34, 25, 8, 83, 98, 37],
+              [2, 82, 85, 95, 28, 19, 102, 98, 79, 68, 14, 1]]
 
-
-test_cases = [[(2, 1, 3), (5, 1, 6), (2, 9, 11), (7, 7, 14), (4, 4, 8)],
-              [(5, 3, 8), (9, 2, 7), (3, 6, 9), (1, 7, 8), (1, 9, 10)],
-              [(1, 4, 5), (1, 4, 5), (5, 1, 6), (4, 9, 13), (4, 8, 12)],
-              [(9, 8, 17), (1, 9, 9), (2, 8, 10), (8, 2, 10), (8, 2, 10)],
-              [(8, 2, 8), (2, 6, 8), (9, 6, 15), (7, 8, 15), (3, 1, 4)],
-              [(6, 7, 13), (5, 3, 2), (7, 2, 9), (1, 3, 4), (5, 6, 11)],
-              [(6, 7, 13), (7, 5, 12), (4, 6, 10), (4, 7, 11), (8, 1, 9)],
-              [(9, 5, 14), (1, 4, 5), (8, 2, 10), (1, 1, 2), (3, 8, 11)]]
-
-solutions = [True, False, True, False, False, False, True, True]
-
+solutions = [False, True, False, False, True, True]
 # ===============================================
 # ================= black magic =================
 
@@ -72,11 +62,99 @@ for i, test_case in enumerate(test_cases):
     # add first line as declaration of list
     test_program = [input_line] + program
     Check.run(test_program, dict())
-    Check.output(Check.current_part['solution'], [
-        str(solutions[i])
-    ])
-# ===============================================
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
 
+
+# =====================================================================@032867=
+# Napiši program, ki prejme seznam števil ter vrne `True`, če so vsa liha, in `False`, če
+# niso. Če je seznam prazen, naj funkcija vrne `True`, saj v njem ni ne-lihih števil.
+# Seznam naj bo podan kar na začetku programa v spremenjivki `s`, na koncu pa naj program
+# izpiše zgolj rešitev, brez olepšav.
+# 
+# Prva vrstica tvojega programa naj bo:
+# 
+#     s = [5, 3, 3, 7, 1, 13]
+# 
+# Program naj na koncu preprosto prikaže rešitev:
+# 
+#     True
+# -----------------------------------------------------------------------------
+# s = [5, 3, 3, 7, 1, 13]
+# =============================================================================
+s = []
+sama_liha = True
+for e in s:
+    if e % 2 == 0:
+        sama_liha = False
+print(sama_liha)
+
+Check.part()
+resitev = Check.current_part['solution'].split('\n')
+sez_str = resitev[0]
+if 's=[' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko s.\n"
+                "Na primer:\n"
+                "s = [5, 8, -3, 6, 0, -1]")
+program = resitev[1:]
+
+# ===============================================
+# ================ Test cases ===================
+def first_line(test):
+    return "s = " + str(test)
+
+# test cases
+test_cases = [[12, 66, 89, 6, 80, 44],
+              [47, 63, 5, 41, 11, 27, 67, 91],
+              [15, 17, 67, 77, 62, 8, 13],
+              [89, 78, 37, 60, 85, 54, 17, 38, 6, 90, 23],
+              [71, 35, 25, 7, 83, 99, 37],
+              [1, 83, 85, 95, 27, 19, 103, 97, 79, 69, 13, 1],
+              []]
+
+solutions = [False, True, False, False, True, True, True]
+# ===============================================
+# ================= black magic =================
+
+for i, test_case in enumerate(test_cases):
+    input_line = first_line(test_case)
+
+    # replace first line in solution
+    Check.current_part['solution'] = "\n".join([input_line] + Check.current_part['solution'].split('\n')[1:])
+    # add first line as declaration of list
+    test_program = [input_line] + program
+    Check.run(test_program, dict())
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
+
+
+# # =====================================================================@000000=
+# # This is a template for a new problem part. To create a new part, uncomment
+# # the template and fill in your content.
+# #
+# # Define a function `multiply(x, y)` that returns the product of `x` and `y`.
+# # For example:
+# #
+# #     >>> multiply(3, 7)
+# #     21
+# #     >>> multiply(6, 7)
+# #     42
+# # =============================================================================
+#
+# def multiply(x, y):
+#     return x * y
+#
+# Check.part()
+#
+# Check.equal('multiply(3, 7)', 21)
+# Check.equal('multiply(6, 7)', 42)
+# Check.equal('multiply(10, 10)', 100)
+# Check.secret(multiply(100, 100))
+# Check.secret(multiply(500, 123))
 
 
 # ===========================================================================@=
@@ -525,7 +603,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12293
+        'problem': 12289
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -537,8 +615,8 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12293,
-        'problem_set': 2537
+        'id': 12289,
+        'problem_set': 2536
     }
 
 def _validate_current_file():

@@ -5,69 +5,47 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Indeks telesne teže
-# =====================================================================@032872=
-# Imejmo seznam trojk ime osebe, teža, višina, na primer:
+# Ajavost nizov
+# =====================================================================@032861=
+# Napiši program, ki mu uporabnik poda niz in računalnik mu pove, koliko malih črk "a" je v njem.
+# niz naj bo podan kar na začetku programa v spremenjivki `niz`, na koncu pa naj program izpiše
+# zgolj rešitev, brez olepšav.
 # 
-#     podatki = [
-#       ["Ana", 55, 165],
-#       ["Berta", 60, 153],
-#     ]
+# Prva vrstica tvojega programa naj bo:
 # 
+#     niz = "Tole je moj niz, v katerem imam 3 a-je"
 # 
-# Napiši program, ki izpiše imena oseb in njihove indekse telesne teže. Dobimo jo tako, da težo
-# delimo s kvadratom višine v metrih, rezultat pa naj bo zaokrožen na dve decimalki.
-# Vhod bo podan v prvi vrstici, v spremenljivki `podatki`:
+# Program naj na koncu preprosto izpiše število a-jev:
 # 
-#     podatki = [["Ana", 55, 165], ["Berta", 60, 153]]
-# 
-# Izhod naj bo izpis (brez olepšav):
-# 
-#     Ana 20.2
-#     Berta 25.63
+#     3
 # -----------------------------------------------------------------------------
-# podatki = [["Ana", 55, 165], ["Berta", 60, 153]]
+# niz = "Tole je moj niz, v katerem imam 3 a-je"
 # =============================================================================
-podatki = [('Ana', 69, 183), ('Andrej', 68, 190), ('Franc', 61, 163), ('Franc', 82, 168), ('Maja', 74, 183)]
-for ime, teza, visina in podatki:
-    print(ime, round(teza / (visina / 100) ** 2, 2))
+niz = "AaaAA"
+stevec = 0
+for crka in niz:
+    if crka == 'a':
+        stevec += 1
+print(stevec)
 
 Check.part()
 resitev = Check.current_part['solution'].split('\n')
 sez_str = resitev[0]
-if 'podatki=[' not in sez_str.replace(" ", ""):
-    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko podatki.\n"
+if 'niz=' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko niz.\n"
                 "Na primer:\n"
-                'podatki = [["Ana", 55, 165], ["Berta", 60, 153]]')
+                "niz = [5, 8, 3, 6, 0, 1]")
 program = resitev[1:]
-
 
 # ===============================================
 # ================ Test cases ===================
 def first_line(test):
-    return "podatki = " + str(test)
-
+    return "niz = " + str(test)
 
 # test cases
-test_cases = [[('Mojca', 52, 177), ('Mojca', 64, 163), ('Andrej', 83, 180), ('Janez', 51, 187), ('Marija', 76, 175)],
-           [('Irena', 64, 180), ('Andrej', 52, 177), ('Maja', 82, 165), ('Marko', 68, 162), ('Mojca', 60, 165)],
-           [('Mojca', 77, 160), ('Marija', 68, 170), ('Maja', 71, 185), ('Janez', 70, 183), ('Mojca', 75, 181)],
-           [('Mojca', 59, 179), ('Marija', 62, 180), ('Janez', 62, 168), ('Mojca', 50, 163), ('Andrej', 57, 178)],
-           [('Marko', 50, 182), ('Andrej', 83, 175), ('Marija', 72, 179), ('Marko', 78, 181), ('Marija', 55, 169)],
-           [('Ana', 81, 180), ('Marija', 63, 166), ('Marko', 80, 186), ('Marija', 76, 177), ('Maja', 66, 179)],
-           [('Maja', 52, 186), ('Irena', 64, 160), ('Marija', 61, 187), ('Maja', 77, 182), ('Franc', 70, 176)],
-           [('Ana', 69, 183), ('Andrej', 68, 190), ('Franc', 61, 163), ('Franc', 82, 168), ('Maja', 74, 183)]]
+test_cases = ['"abeceda"', '"abracadabra"', '"informatika"', '"programiranje"', '"nic"', '"AaaAA"']
 
-
-solutions = [['Mojca 16.6', 'Mojca 24.09', 'Andrej 25.62', 'Janez 14.58', 'Marija 24.82'],
-             ['Irena 19.75', 'Andrej 16.6', 'Maja 30.12', 'Marko 25.91', 'Mojca 22.04'],
-             ['Mojca 30.08', 'Marija 23.53', 'Maja 20.75', 'Janez 20.9', 'Mojca 22.89'],
-             ['Mojca 18.41', 'Marija 19.14', 'Janez 21.97', 'Mojca 18.82', 'Andrej 17.99'],
-             ['Marko 15.09', 'Andrej 27.1', 'Marija 22.47', 'Marko 23.81', 'Marija 19.26'],
-             ['Ana 25.0', 'Marija 22.86', 'Marko 23.12', 'Marija 24.26', 'Maja 20.6'],
-             ['Maja 15.03', 'Irena 25.0', 'Marija 17.44', 'Maja 23.25', 'Franc 22.6'],
-             ['Ana 20.6', 'Andrej 18.84', 'Franc 22.96', 'Franc 29.05', 'Maja 22.1']]
-
+solutions = [2, 5, 2, 2, 0, 2]
 # ===============================================
 # ================= black magic =================
 
@@ -79,9 +57,10 @@ for i, test_case in enumerate(test_cases):
     # add first line as declaration of list
     test_program = [input_line] + program
     Check.run(test_program, dict())
-    Check.output(Check.current_part['solution'], [ el for el in
-        solutions[i]
-    ])
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
 # ===============================================
 
 
@@ -556,7 +535,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12292
+        'problem': 12285
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -568,8 +547,8 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12292,
-        'problem_set': 2537
+        'id': 12285,
+        'problem_set': 2536
     }
 
 def _validate_current_file():
