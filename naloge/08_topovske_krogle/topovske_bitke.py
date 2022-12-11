@@ -1,3 +1,10 @@
+def testna_nalog(arg):
+    """
+    ta naloga zgolj vrne vhodni argument
+    """
+    pass
+
+
 def se_napadata(top1, top2):
     """
     Prejme koordinati dveh topov in vrne True, če se med seboj napadata (torej: če sta v isti vrstici ali stolpcu)
@@ -126,4 +133,3 @@ def direkten_napad(top1, top2, topovi):
 if __name__ == "__main__":
     # tukaj lahko testiramo funkcije
     pass
-

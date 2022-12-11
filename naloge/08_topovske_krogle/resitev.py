@@ -1,3 +1,7 @@
+def testna_nalog(arg):
+    return arg
+
+
 def se_napadata(top1, top2):
     return top1 != top2 and (top1[0] == top2[0] or top1[1] == top2[1])
 
@@ -55,7 +59,7 @@ def direkten_napad(top1, top2, topovi):
         linija = 0
     for top_vm in nap:
         if top1 != top_vm != top2 and \
-                top1[1 - linija] == top_vm[1 - linija]  and \
+                top1[1 - linija] == top_vm[1 - linija] and \
                 (top1[linija] > top_vm[linija]) != (top2[linija] > top_vm[linija]):
             return False
     return True
