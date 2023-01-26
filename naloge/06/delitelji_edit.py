@@ -5,52 +5,192 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Emšo
-# =====================================================================@032898=
-# Številka EMŠO je sestavljena iz trinajst števk v obliki `DDMMLLL50NNNX`, pri čemer je
-# `DDMMLLL` rojstni datum, `50` je koda registra (EMŠO je nastala v času Jugoslavije in 50 je bila
-# koda za Slovenijo), `NNN` je zaporedna številka in `X` kontrolna številka. Trimestna številka, `NNN`,
-# je med `000` in `499` za moške ter med `500` in `999` za ženske.
-# Napiši funkcijo `je_zenska(emso)`, ki za številko EMŠO, ki jo podamo kot niz, vrne `True`, če
-# pripada ženski in `False`, če moškemu.
+# Delitelji
+# =====================================================================@032893=
+# Napiši program, ki izpiše seznam vseh deliteljev podanega števila. Vhod bo podan
+# v prvi vrstici v spremenljivki `stevilo`:
 # 
-#     >>> je_zenska("1003995500259")
-#     False
+#     stevilo = 12345
+# 
+# Izhod naj bo seznam deliteljev:
+# 
+#     [1, 3, 5, 15, 823, 2469, 4115, 12345]
+# -----------------------------------------------------------------------------
+# stevilo = 12345
 # =============================================================================
-def je_zenska(emso):
-    return emso[9] >= "5"
+stevilo = 19
+seznam_del = []
+for i in range(1, stevilo + 1):
+    if stevilo % i == 0:
+        seznam_del.append(i)
+print(seznam_del)
 
 Check.part()
-Check.equal('je_zenska("1003995500259")', False)
-Check.equal('je_zenska("0307985505231")', True)
-Check.equal('je_zenska("2310004500217")', False)
-Check.equal('je_zenska("2112007505264")', True)
+resitev = Check.current_part['solution'].split('\n')
+sez_str = resitev[0]
+if 'stevilo=' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti definicija spremenljivke stevilo.\n"
+                "Na primer:\n"
+                'stevilo = 12345')
+program = resitev[1:]
 
 
-# =====================================================================@032899=
-# Zadnja števka v EMŠO je kontrolna. Izračuna se takole: prvo števko EMŠO pomnožimo s 7,
-# drugo s šest, tretjo s pet in tako naprej, do šeste, ki jo pomnožimo z 2. Sedmo spet
-# pomnožimo s 7, osmo s 6, deveto s 5 in tako do dvanajste, ki jo pomnožimo z 2. Za zadnjo,
-# trinajsto števko, velja tole: če jo prištejemo h gornji vsoti, dobimo število, ki je deljivo z 11.
+# ===============================================
+# ================ Test cases ===================
+def first_line(test):
+    return "stevilo = " + str(test)
+
+
+# test cases
+
+
+test_cases = [12345, 1, 10, 19]
+
+solutions = [
+    [1, 3, 5, 15, 823, 2469, 4115, 12345],
+    [1],
+    [1,2,5,10],
+    [1,19]
+]
+
+# ===============================================
+# ================= black magic =================
+
+for i, test_case in enumerate(test_cases):
+    input_line = first_line(test_case)
+
+    # replace first line in solution
+    Check.current_part['solution'] = "\n".join([input_line] + Check.current_part['solution'].split('\n')[1:])
+    # add first line as declaration of list
+    test_program = [input_line] + program
+    Check.run(test_program, dict())
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
+# ===============================================
+
+
+# =====================================================================@032894=
+# Napiši program, ki izpiše vsoto deliteljev podanega števila. Med delitelji
+# naj bo tudi 1, ne pa število samo. Vsota deliteljev 12 je tako 1 + 2 + 3 + 4 + 6 = 16.
+# Vhod bo podan v prvi vrstici v spremenljivki `stevilo`:
 # 
-# Napiši funkcijo `preveri_emso(emso)`, ki preveri pravilnost podane številke EMŠO.
+#     stevilo = 12345
 # 
-#     >>> preveri_emso("2112007505264")
+# Izhod naj bo vsota deliteljev:
+# 
+#     16
+# -----------------------------------------------------------------------------
+# stevilo = 12345
+# =============================================================================
+stevilo = 13
+v = 0
+for i in range(1, stevilo):
+    if stevilo % i == 0:
+        v += i
+print(v)
+
+Check.part()
+resitev = Check.current_part['solution'].split('\n')
+sez_str = resitev[0]
+if 'stevilo=' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti definicija spremenljivke stevilo.\n"
+                "Na primer:\n"
+                'stevilo = 12345')
+program = resitev[1:]
+
+
+# ===============================================
+# ================ Test cases ===================
+def first_line(test):
+    return "stevilo = " + str(test)
+
+
+# test cases
+
+
+test_cases = [12, 42, 100, 13]
+
+solutions = [16, 54, 117, 1]
+
+# ===============================================
+# ================= black magic =================
+
+for i, test_case in enumerate(test_cases):
+    input_line = first_line(test_case)
+
+    # replace first line in solution
+    Check.current_part['solution'] = "\n".join([input_line] + Check.current_part['solution'].split('\n')[1:])
+    # add first line as declaration of list
+    test_program = [input_line] + program
+    Check.run(test_program, dict())
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
+# ===============================================
+
+
+# =====================================================================@032895=
+# Napiši program, ki izpiše `True`, če je podano število praštevilo in `False`, če ni.
+# Vhod bo podan v prvi vrstici v spremenljivki `stevilo`:
+# 
+#     stevilo = 13
+# 
+# Izhod pove, če je število praštevilo:
+# 
 #     True
-#     >>> preveri_emso("1203999500233")
-#     False
+# -----------------------------------------------------------------------------
+# stevilo = 13
 # =============================================================================
-def preveri_emso(emso):
-    vsota = 0
-    for i in range(len(emso[:-1])):
-        vsota += (7 - i % 6) * int(emso[i])
-    return (vsota + int(emso[-1])) % 11 == 0
+stevilo = 7919
+for i in range(2, stevilo):
+    if stevilo % i == 0:
+        print(False)
+        break
+else:
+    print(True)
 
 Check.part()
-Check.equal('preveri_emso("1003995500258")', False)
-Check.equal('preveri_emso("0307985505231")', True)
-Check.equal('preveri_emso("2310004500216")', False)
-Check.equal('preveri_emso("2112007505264")', True)
+resitev = Check.current_part['solution'].split('\n')
+sez_str = resitev[0]
+if 'stevilo=' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti definicija spremenljivke stevilo.\n"
+                "Na primer:\n"
+                'stevilo = 12345')
+program = resitev[1:]
+
+
+# ===============================================
+# ================ Test cases ===================
+def first_line(test):
+    return "stevilo = " + str(test)
+
+
+# test cases
+
+
+test_cases = [10, 13, 17, 100, 42, 7919]
+
+solutions = [False, True, True, False, False, True]
+
+# ===============================================
+# ================= black magic =================
+
+for i, test_case in enumerate(test_cases):
+    input_line = first_line(test_case)
+
+    # replace first line in solution
+    Check.current_part['solution'] = "\n".join([input_line] + Check.current_part['solution'].split('\n')[1:])
+    # add first line as declaration of list
+    test_program = [input_line] + program
+    Check.run(test_program, dict())
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
+# ===============================================
 
 
 # # =====================================================================@000000=
@@ -524,7 +664,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12310
+        'problem': 12308
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -536,7 +676,7 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12310,
+        'id': 12308,
         'problem_set': 2540
     }
 

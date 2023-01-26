@@ -5,57 +5,62 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Črke
-# =====================================================================@032900=
-# Napiši funkcijo `mesta_crke(beseda, crka)`, ki vrne seznam mest v besedi, na katerih nastopa
-# podana črka.
+# Fibonaccijevo zaporedje
+# =====================================================================@032902=
+# Fibonaccijevo zaporedje se začne s številoma 1, 1, vsak naslednji člen pa dobimo tako, da
+# seštejemo prejšnja dva. 1 in 1 je 2, 1 in 2 je 3, 2 in 3 je 5, 3 in 5 je 8 in tako naprej. Zaporedje se
+# tako začne z 1 1 2 3 5 8 13 21 34 55.
+# Napiši program, ki vrne seznam prvih n členov zaporedja. Vhod bo podan v prvi vrstici v spremenljivki `n`
 # 
-#     >>> mesta_crke("PONUDNIK","N")
-#     [2, 5]
-#     >>> mesta_crke("RABARBARA", "R")
-#     [0, 4, 7]
-#     >>> mesta_crke("AMFITEATER", "O")
-#     []
+#     n = 6
+# 
+# Izhod izpiše seznam prvih n členov zaporedja
+# 
+#     [1, 1, 2, 3, 5, 8]
+# -----------------------------------------------------------------------------
+# n = 6
 # =============================================================================
-def mesta_crke(beseda, crka):
-    mesta = []
-    for i in range(len(beseda)):
-        if beseda[i] == crka:
-            mesta.append(i)
-    return mesta
+n = 6
+sez = []
+a = b = 1
+for i in range(n):
+    sez.append(a)
+    a, b = b, a + b
+print(sez)
 
 Check.part()
-Check.equal('mesta_crke("abeceda", "a")', [0, 6])
-Check.equal('mesta_crke("mesto", "z")', [])
-Check.equal('mesta_crke("abrakadabra", "r")', [2, 9])
-Check.equal('mesta_crke("PONUDNIK", "N")', [2, 5])
-Check.equal('mesta_crke("RABARBARA", "R")', [0, 4, 7])
-Check.equal('mesta_crke("AMFITEATER", "O")', [])
+var_name = "n"
+resitev = Check.current_part['solution'].split('\n')
+input_str = resitev[0]
+if f'{var_name}=' not in input_str.replace(" ", ""):
+    Check.error(f"Prva vrstica programa mora biti definicija spremenljivke {var_name}.\n"
+                "Na primer:\n"
+                f'{var_name} = 6')
+user_solution = resitev[1:]
 
 
-# =====================================================================@032901=
-# Napiši funkcijo `sumljive(besedilo)`, ki vrne seznam vseh sumljivih besed v danem nizu. Beseda je sumljiva, če
-# vsebuje tako črko u kot črko a.
-# 
-#     >>> sumljive('Muha pa je rekla: "Tale juha se je pa res prilegla, najlepsa huala," in odletela.')
-#     ['Muha', 'juha', 'huala,"']
-# =============================================================================
-def sumljive(s):
-    sumljivke = []
-    for beseda in s.split():
-        if 'u' in beseda and 'a' in beseda:
-            sumljivke.append(beseda)
-    return sumljivke
+# ===============================================
+# ================ Test cases ===================
 
-Check.part()
-Check.equal('sumljive("Muha pa je rekla: Tale juha se je pa res prilegla, najlepsa huala, in odletela.")', ['Muha', 'juha', 'huala,'])
-Check.equal('sumljive("Perica reze raci rep")', [])
-Check.equal('sumljive("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum nibh enim, euismod in '
-            'sagittis at, scelerisque ac nibh. Aenean sapien diam, fringilla eu nunc et, iaculis ornare orci. Nullam '
-            'ipsum elit, lobortis in ornare et, viverra a magna. Nulla ante libero, condimentum ac arcu in, laoreet '
-            'laoreet quam. Proin non tortor pellentesque, ornare tellus vitae, gravida urna. Donec sollicitudin '
-            'maximus ante nec accumsan. Phasellus nulla libero, elementum a magna id, interdum gravida nisi.")',
-            ['iaculis', 'Nullam', 'Nulla', 'arcu', 'quam.', 'urna.', 'maximus', 'accumsan.', 'Phasellus', 'nulla'])
+test_cases = [2, 5, 8, 20]
+
+solutions = [
+    [1, 1],
+    [1, 1, 2, 3, 5],
+    [1, 1, 2, 3, 5, 8, 13, 21],
+    [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765]
+]
+
+# ===============================================
+# ================= black magic =================
+input_lines = [[f'{var_name} = {inp}'] for inp in test_cases]
+for i, input_line in enumerate(input_lines):
+    program = '\n'.join(input_line + user_solution)
+    with Check.input(input_line):
+        Check.output(program, [
+            str(solutions[i])
+        ])
+# ===============================================
 
 
 # # =====================================================================@000000=
@@ -529,7 +534,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12311
+        'problem': 12312
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -541,7 +546,7 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12311,
+        'id': 12312,
         'problem_set': 2540
     }
 

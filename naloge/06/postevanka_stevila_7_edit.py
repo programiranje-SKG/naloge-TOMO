@@ -5,29 +5,133 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Fibonaccijevo zaporedje
-# =====================================================================@032902=
-# Fibonaccijevo zaporedje se začne s številoma 1, 1, vsak naslednji člen pa dobimo tako, da
-# seštejemo prejšnja dva. 1 in 1 je 2, 1 in 2 je 3, 2 in 3 je 5, 3 in 5 je 8 in tako naprej. Zaporedje se
-# tako začne z 1 1 2 3 5 8 13 21 34 55.
-# Napiši funkcijo `fibonacci(n)`, ki vrne seznam prvih n členov zaporedja:
+# Poštevanka števila 7
+# =====================================================================@032896=
+# Napiši program, ki izpiše `True`, če število vsebuje števko 7. Vhod bo podan
+# v prvi vrstici v spremenljivki `stevilo`:
 # 
-#     > fibonacci(6):
-#     [1, 1, 2, 3, 5, 8]
+#     stevilo = 5678
+# 
+# Izhod izpiše, če število vsebuje 7:
+# 
+#     True
+# -----------------------------------------------------------------------------
+# stevilo = 5678
 # =============================================================================
-def fibonacci(n):
-    sez = []
-    a = b = 1
-    for i in range(n):
-        sez.append(a)
-        a, b = b, a + b
-    return sez
+stevilo = 203059702039
+while stevilo > 0:
+    if stevilo % 10 == 7:
+        print(True)
+        break
+    stevilo //= 10
+else:
+    print(False)
 
 Check.part()
-Check.equal('fibonacci(2)', [1, 1])
-Check.equal('fibonacci(5)', [1, 1, 2, 3, 5])
-Check.equal('fibonacci(8)', [1, 1, 2, 3, 5, 8, 13, 21])
-Check.equal('fibonacci(20)', [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765])
+resitev = Check.current_part['solution'].split('\n')
+sez_str = resitev[0]
+if 'stevilo=' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti definicija spremenljivke stevilo.\n"
+                "Na primer:\n"
+                'stevilo = 5678')
+program = resitev[1:]
+
+
+# ===============================================
+# ================ Test cases ===================
+def first_line(test):
+    return "stevilo = " + str(test)
+
+
+# test cases
+
+
+test_cases = [7, 123, 7234, 23457, 194932940392, 203059702039]
+
+solutions = [True, False, True, True, False, True]
+
+# ===============================================
+# ================= black magic =================
+
+for i, test_case in enumerate(test_cases):
+    input_line = first_line(test_case)
+
+    # replace first line in solution
+    Check.current_part['solution'] = "\n".join([input_line] + Check.current_part['solution'].split('\n')[1:])
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
+# ===============================================
+
+
+# =====================================================================@032897=
+# Poštevanko števila 7 se igra tako, da igralci, ki sedijo v krogu, kvadratu ali kakem drugem
+# primernem (po potrebi nepravilnem, a po možnosti konveksnem) poligonu po vrsti govorijo
+# števila od ena do neskončno, pri čemer morajo namesto vseh števil, ki so deljiva s 7 ali pa
+# vsebujejo števko 7, reči BUM. Igralec, ki se zmoti, izpade in štetje se začne od začetka.
+# 
+# Igra
+# torej teče tako:
+# 1 2 3 4 5 6 BUM 8 9 10 11 12 13 BUM 15 16 BUM 18 19 20 BUM 22 23 24 25 26 BUM BUM 29 ...
+# 
+# 
+# Napiši program, ki izpiše tole zaporedje od 1 do n. Vhod bo podan v prvi vrstici v
+# spremenljivki `n`:
+# 
+#     n = 10
+# 
+# Izpisuje naj vsako število v svoji vrstici, eno pod drugo:
+# 
+#     1
+#     2
+#     3
+#     4
+#     5
+#     6
+#     BUM
+#     8
+#     9
+#     10
+# -----------------------------------------------------------------------------
+# n = 10
+# =============================================================================
+n = 42
+for i in range(1, n + 1):
+    bum = i % 7 == 0
+    j = i
+    while j and not bum:
+        if j % 10 == 7:
+            bum = True
+        j //= 10
+    if bum:
+        print("BUM")
+    else:
+        print(i)
+
+Check.part()
+resitev = Check.current_part['solution'].split('\n')
+sez_str = resitev[0]
+if 'n=' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti definicija spremenljivke n.\n"
+                "Na primer:\n"
+                'n = 42')
+solution = resitev[1:]
+inputs = [10,20,100,7,1]
+solutions = [
+    [1, 2, 3, 4, 5, 6, 'BUM', 8, 9, 10],
+    [1, 2, 3, 4, 5, 6, 'BUM', 8, 9, 10, 11, 12, 13, 'BUM', 15, 16, 'BUM', 18, 19, 20],
+    [1, 2, 3, 4, 5, 6, 'BUM', 8, 9, 10, 11, 12, 13, 'BUM', 15, 16, 'BUM', 18, 19, 20, 'BUM', 22, 23, 24, 25, 26, 'BUM', 'BUM', 29, 30, 31, 32, 33, 34, 'BUM', 36, 'BUM', 38, 39, 40, 41, 'BUM', 43, 44, 45, 46, 'BUM', 48, 'BUM', 50, 51, 52, 53, 54, 55, 'BUM', 'BUM', 58, 59, 60, 61, 62, 'BUM', 64, 65, 66, 'BUM', 68, 69, 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 80, 81, 82, 83, 'BUM', 85, 86, 'BUM', 88, 89, 90, 'BUM', 92, 93, 94, 95, 96, 'BUM', 'BUM', 99, 100],
+    [1, 2, 3, 4, 5, 6, 'BUM'],
+    [1]
+]
+input_lines = [[f"n = {inp}"] for inp in inputs]
+for i, input_line in enumerate(input_lines):
+    program = input_line + solution
+    with Check.input(input_line):
+        Check.output("\n".join(program), [ str(x) for x in
+            solutions[i]
+        ])
 
 
 # # =====================================================================@000000=
@@ -501,7 +605,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12312
+        'problem': 12309
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -513,7 +617,7 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12312,
+        'id': 12309,
         'problem_set': 2540
     }
 

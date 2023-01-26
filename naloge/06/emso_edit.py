@@ -5,189 +5,107 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Delitelji
-# =====================================================================@032893=
-# Napiši program, ki izpiše seznam vseh deliteljev podanega števila. Podatki bodo
-# podani v prvi vrstici v spremenljivki `stevilo`:
+# Emšo
+# =====================================================================@032898=
+# Številka EMŠO je sestavljena iz trinajst števk v obliki `DDMMLLL50NNNX`, pri čemer je
+# `DDMMLLL` rojstni datum, `50` je koda registra (EMŠO je nastala v času Jugoslavije in 50 je bila
+# koda za Slovenijo), `NNN` je zaporedna številka in `X` kontrolna številka. Trimestna številka, `NNN`,
+# je med `000` in `499` za moške ter med `500` in `999` za ženske.
+# Napiši program, ki za številko EMŠO, izpiše "F", če emšo pripada ženski, oz. "M",
+# če pripada moškemu. Vhod bo podan v prvi vrstici v spremenljivki `emso`:
 # 
-#     stevilo = 12345
+#     emso = "1003995500259"
 # 
-# Izhod naj bo seznam deliteljev:
+# Izhod izpiše, "F" oz. "M" glede na spol:
 # 
-#     [1, 3, 5, 15, 823, 2469, 4115, 12345]
+#     "M"
 # -----------------------------------------------------------------------------
-# stevilo = 12345
+# emso = "1003995500259"
 # =============================================================================
-stevilo = 19
-seznam_del = []
-for i in range(1, stevilo + 1):
-    if stevilo % i == 0:
-        seznam_del.append(i)
-print(seznam_del)
+emso = "1003995500259"
+if emso[9] >= "5":
+    print("F")
+else:
+    print("M")
 
 Check.part()
+var_name = "emso"
 resitev = Check.current_part['solution'].split('\n')
-sez_str = resitev[0]
-if 'stevilo=' not in sez_str.replace(" ", ""):
-    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko stevilo.\n"
+input_str = resitev[0]
+if f'{var_name}=' not in input_str.replace(" ", ""):
+    Check.error(f"Prva vrstica programa mora biti definicija spremenljivke {var_name}.\n"
                 "Na primer:\n"
-                'stevilo = 12345')
-program = resitev[1:]
+                f'{var_name} = "1003995500259"')
+user_solution = resitev[1:]
 
 
 # ===============================================
 # ================ Test cases ===================
-def first_line(test):
-    return "stevilo = " + str(test)
 
+test_cases = ["1003995500259", "0307985505231", "2310004500217", "2112007505264"]
 
-# test cases
-
-
-test_cases = [12345, 1, 10, 19]
-
-solutions = [
-    [1, 3, 5, 15, 823, 2469, 4115, 12345],
-    [1],
-    [1,2,5,10],
-    [1,19]
-]
+solutions = ["M", "F", "M", "F"]
 
 # ===============================================
 # ================= black magic =================
-
-for i, test_case in enumerate(test_cases):
-    input_line = first_line(test_case)
-
-    # replace first line in solution
-    Check.current_part['solution'] = "\n".join([input_line] + Check.current_part['solution'].split('\n')[1:])
-    # add first line as declaration of list
-    test_program = [input_line] + program
-    Check.run(test_program, dict())
-    with Check.input([input_line]):
-        Check.output(Check.current_part['solution'], [
+input_lines = [[f'{var_name} = "{inp}"'] for inp in test_cases]
+for i, input_line in enumerate(input_lines):
+    program = '\n'.join(input_line + user_solution)
+    with Check.input(input_line):
+        Check.output(program, [
             str(solutions[i])
         ])
 # ===============================================
 
 
-# =====================================================================@032894=
-# Napiši program, ki vrne vsoto deliteljev podanega števila. Med delitelji
-# naj bo tudi 1, ne pa število samo. Vsota deliteljev 12 je tako 1 + 2 + 3 + 4 + 6 = 16.
-# Podatki bodo podani v prvi vrstici v spremenljivki `stevilo`:
+# =====================================================================@032899=
+# Zadnja števka v EMŠO je kontrolna. Izračuna se takole: prvo števko EMŠO pomnožimo s 7,
+# drugo s šest, tretjo s pet in tako naprej, do šeste, ki jo pomnožimo z 2. Sedmo spet
+# pomnožimo s 7, osmo s 6, deveto s 5 in tako do dvanajste, ki jo pomnožimo z 2. Za zadnjo,
+# trinajsto števko, velja tole: če jo prištejemo h gornji vsoti, dobimo število, ki je deljivo z 11.
 # 
-#     stevilo = 12345
+# Napiši program, ki preveri pravilnost podane številke EMŠO. Vhod bo podan v prvi
+# vrstici v spremenljivki `emso`:
 # 
-# Izhod naj bo vsota deliteljev:
+#     emso = "2112007505264"
 # 
-#     16
-# -----------------------------------------------------------------------------
-# stevilo = 12345
-# =============================================================================
-stevilo = 13
-v = 0
-for i in range(1, stevilo):
-    if stevilo % i == 0:
-        v += i
-print(v)
-
-Check.part()
-resitev = Check.current_part['solution'].split('\n')
-sez_str = resitev[0]
-if 'stevilo=' not in sez_str.replace(" ", ""):
-    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko stevilo.\n"
-                "Na primer:\n"
-                'stevilo = 12345')
-program = resitev[1:]
-
-
-# ===============================================
-# ================ Test cases ===================
-def first_line(test):
-    return "stevilo = " + str(test)
-
-
-# test cases
-
-
-test_cases = [12, 42, 100, 13]
-
-solutions = [16, 54, 117, 1]
-
-# ===============================================
-# ================= black magic =================
-
-for i, test_case in enumerate(test_cases):
-    input_line = first_line(test_case)
-
-    # replace first line in solution
-    Check.current_part['solution'] = "\n".join([input_line] + Check.current_part['solution'].split('\n')[1:])
-    # add first line as declaration of list
-    test_program = [input_line] + program
-    Check.run(test_program, dict())
-    with Check.input([input_line]):
-        Check.output(Check.current_part['solution'], [
-            str(solutions[i])
-        ])
-# ===============================================
-
-
-# =====================================================================@032895=
-# Napiši program, ki vrne `True`, če je podano število praštevilo in `False`, če ni.
-# Podatki bodo podani v prvi vrstici v spremenljivki `stevilo`:
-# 
-#     stevilo = 13
-# 
-# Izhod pove, če je število praštevilo:
+# Izhod izpiše `True` oz. `False` glede na pravilnost emša:
 # 
 #     True
 # -----------------------------------------------------------------------------
-# stevilo = 13
+# emso = "2112007505264"
 # =============================================================================
-stevilo = 7919
-for i in range(2, stevilo):
-    if stevilo % i == 0:
-        print(False)
-        break
-else:
-    print(True)
+emso = "2112007505264"
+vsota = 0
+for i in range(len(emso[:-1])):
+    vsota += (7 - i % 6) * int(emso[i])
+print((vsota + int(emso[-1])) % 11 == 0)
 
 Check.part()
+var_name = "emso"
 resitev = Check.current_part['solution'].split('\n')
-sez_str = resitev[0]
-if 'stevilo=' not in sez_str.replace(" ", ""):
-    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko stevilo.\n"
+input_str = resitev[0]
+if f'{var_name}=' not in input_str.replace(" ", ""):
+    Check.error(f"Prva vrstica programa mora biti definicija spremenljivke {var_name}.\n"
                 "Na primer:\n"
-                'stevilo = 12345')
-program = resitev[1:]
+                f'{var_name} = "1003995500259"')
+user_solution = resitev[1:]
 
 
 # ===============================================
 # ================ Test cases ===================
-def first_line(test):
-    return "stevilo = " + str(test)
 
+test_cases = ["1003995500258", "0307985505231", "2310004500216", "2112007505264"]
 
-# test cases
-
-
-test_cases = [10, 13, 17, 100, 42, 7919]
-
-solutions = [False, True, True, False, False, True]
+solutions = [False, True, False, True]
 
 # ===============================================
 # ================= black magic =================
-
-for i, test_case in enumerate(test_cases):
-    input_line = first_line(test_case)
-
-    # replace first line in solution
-    Check.current_part['solution'] = "\n".join([input_line] + Check.current_part['solution'].split('\n')[1:])
-    # add first line as declaration of list
-    test_program = [input_line] + program
-    Check.run(test_program, dict())
-    with Check.input([input_line]):
-        Check.output(Check.current_part['solution'], [
+input_lines = [[f'{var_name} = "{inp}"'] for inp in test_cases]
+for i, input_line in enumerate(input_lines):
+    program = '\n'.join(input_line + user_solution)
+    with Check.input(input_line):
+        Check.output(program, [
             str(solutions[i])
         ])
 # ===============================================
@@ -664,7 +582,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12308
+        'problem': 12310
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -676,7 +594,7 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12308,
+        'id': 12310,
         'problem_set': 2540
     }
 

@@ -5,84 +5,134 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# Poštevanka števila 7
-# =====================================================================@032896=
-# Napiši program, ki vrne `True`, če število vsebuje števko 7.
+# Črke
+# =====================================================================@032900=
+# Napiši program, ki prejme besedo in črko ter vrne seznam mest v besedi, na katerih nastopa
+# podana črka. Vhod predstavlja seznam, ki ima na prvem mestu besedo, na drugem pa črko.
+# Podatke nato lahko v drugi vrstici razpakiramo:
 # 
-#     >>> vsebuje_7(1234)
-#     False
-#     >>> vsebuje_7(5678)
-#     True
+#     vhod = ["PONUDNIK", "N"]
+#     beseda, crka = vhod
+# 
+# Izhod v tem primeru bo:
+# 
+#     [2, 5]
+# -----------------------------------------------------------------------------
+# vhod = ["PONUDNIK", "N"]
+# beseda, crka = vhod
 # =============================================================================
-def vsebuje_7(n):
-    while n > 0:
-        if n % 10 == 7:
-            return True
-        n //= 10
-    return False
+vhod = ["PONUDNIK", "N"]
+beseda, crka = vhod
+mesta = []
+for i in range(len(beseda)):
+    if beseda[i] == crka:
+        mesta.append(i)
+print(mesta)
 
 Check.part()
-Check.equal('vsebuje_7(7)', True)
-Check.equal('vsebuje_7(123)', False)
-Check.equal('vsebuje_7(7234)', True)
-Check.equal('vsebuje_7(23457)', True)
-Check.equal('vsebuje_7(194932940392)', False)
-Check.equal('vsebuje_7(203059702039)', True)
-
-
-# =====================================================================@032897=
-# Poštevanko števila 7 se igra tako, da igralci, ki sedijo v krogu, kvadratu ali kakem drugem
-# primernem (po potrebi nepravilnem, a po možnosti konveksnem) poligonu po vrsti govorijo
-# števila od ena do neskončno, pri čemer morajo namesto vseh števil, ki so deljiva s 7 ali pa
-# vsebujejo števko 7, reči BUM. Igralec, ki se zmoti, izpade in štetje se začne od začetka.
-# 
-# Igra
-# torej teče tako:
-# 1 2 3 4 5 6 BUM 8 9 10 11 12 13 BUM 15 16 BUM 18 19 20 BUM 22 23 24 25 26 BUM BUM 29 ...
-# 
-# 
-# Napiši funkcijo `postevanka_7(n)`, ki izpiše tole zaporedje od 1 do n. Ne da bi se zmotila.
-# Izpisuje vsako število v svoji vrstici, eno pod drugo:
-# 
-#     >>> postevanka_7(10)
-#     1
-#     2
-#     3
-#     4
-#     5
-#     6
-#     BUM
-#     8
-#     9
-#     10
-# 
-# Nalogo lahko rešiš tako, da si pomagaš s funkcijo iz prejšnje naloge.
-# =============================================================================
-def postevanka_7(n):
-    for i in range(1, n + 1):
-        if i % 7 == 0 or vsebuje_7(i):
-            print("BUM")
-        else:
-            print(i)
-
-Check.part()
-inputs = [10,20,100,7,1]
-solutions = [
-    [1, 2, 3, 4, 5, 6, 'BUM', 8, 9, 10],
-    [1, 2, 3, 4, 5, 6, 'BUM', 8, 9, 10, 11, 12, 13, 'BUM', 15, 16, 'BUM', 18, 19, 20],
-    [1, 2, 3, 4, 5, 6, 'BUM', 8, 9, 10, 11, 12, 13, 'BUM', 15, 16, 'BUM', 18, 19, 20, 'BUM', 22, 23, 24, 25, 26, 'BUM', 'BUM', 29, 30, 31, 32, 33, 34, 'BUM', 36, 'BUM', 38, 39, 40, 41, 'BUM', 43, 44, 45, 46, 'BUM', 48, 'BUM', 50, 51, 52, 53, 54, 55, 'BUM', 'BUM', 58, 59, 60, 61, 62, 'BUM', 64, 65, 66, 'BUM', 68, 69, 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 'BUM', 80, 81, 82, 83, 'BUM', 85, 86, 'BUM', 88, 89, 90, 'BUM', 92, 93, 94, 95, 96, 'BUM', 'BUM', 99, 100],
-    [1, 2, 3, 4, 5, 6, 'BUM'],
-    [1]
-]
-input_lines = [[f"postevanka_7({inp})"] for inp in inputs]
+var_name = "vhod"
 resitev = Check.current_part['solution'].split('\n')
+input_str = resitev[0]
+if f'{var_name}=[' not in input_str.replace(" ", ""):
+    Check.error(f"Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko {var_name}.\n"
+                "Na primer:\n"
+                f'{var_name} = ["PONUDNIK", "N"]')
+user_solution = resitev[1:]
+
+
+# ===============================================
+# ================ Test cases ===================
+
+test_cases = [
+    ["abeceda", "a"],
+    ["mesto", "z"],
+    ["abrakadabra", "r"],
+    ["PONUDNIK", "N"],
+    ["RABARBARA", "R"],
+    ["AMFITEATER", "O"]
+]
+
+solutions = [
+    [0, 6],
+    [],
+    [2, 9],
+    [2, 5],
+    [0, 4, 7],
+    []
+]
+
+# ===============================================
+# ================= black magic =================
+input_lines = [[f'{var_name} = {str(inp)}'] for inp in test_cases]
 for i, input_line in enumerate(input_lines):
-    program = resitev + input_line
-    Check.run(program, dict())
+    program = '\n'.join(input_line + user_solution)
     with Check.input(input_line):
-        Check.output("\n".join(program), [ str(x) for x in
-            solutions[i]
+        Check.output(program, [
+            str(solutions[i])
         ])
+# ===============================================
+
+
+# =====================================================================@032901=
+# Napiši program, ki izpiše seznam vseh sumljivih besed v danem nizu. Beseda je
+# sumljiva, če vsebuje tako črko u kot črko a. Vhod bo podan v prvi vrstici v
+# spremenljivki `niz`:
+# 
+#     niz = 'Muha pa je rekla: "Tale juha se je pa res prilegla, najlepsa huala," in odletela.'
+# 
+# Izhod v tem primeru bo:
+# 
+#     ['Muha', 'juha', 'huala,"']
+# -----------------------------------------------------------------------------
+# niz = 'Muha pa je rekla: "Tale juha se je pa res prilegla, najlepsa huala," in odletela.'
+# =============================================================================
+niz = 'Muha pa je rekla: "Tale juha se je pa res prilegla, najlepsa huala," in odletela.'
+sumljivke = []
+for beseda in niz.split():
+    if 'u' in beseda and 'a' in beseda:
+        sumljivke.append(beseda)
+print(sumljivke)
+
+Check.part()
+var_name = "niz"
+resitev = Check.current_part['solution'].split('\n')
+input_str = resitev[0]
+if f'{var_name}=' not in input_str.replace(" ", ""):
+    Check.error(f"Prva vrstica programa mora biti deklariacija spremenljivke {var_name}.\n"
+                "Na primer:\n"
+                f'{var_name} = "Perica reze raci rep"')
+user_solution = resitev[1:]
+
+
+# ===============================================
+# ================ Test cases ===================
+
+test_cases = [
+    "Muha pa je rekla: Tale juha se je pa res prilegla, najlepsa huala, in odletela.",
+    "Perica reze raci rep",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum nibh enim, euismod in "
+    "sagittis at, scelerisque ac nibh. Aenean sapien diam, fringilla eu nunc et, iaculis ornare orci. Nullam "
+    "ipsum elit, lobortis in ornare et, viverra a magna. Nulla ante libero, condimentum ac arcu in, laoreet "
+    "laoreet quam. Proin non tortor pellentesque, ornare tellus vitae, gravida urna. Donec sollicitudin "
+    "maximus ante nec accumsan. Phasellus nulla libero, elementum a magna id, interdum gravida nisi."
+]
+
+solutions = [
+    ['Muha', 'juha', 'huala,'],
+    [],
+    ['iaculis', 'Nullam', 'Nulla', 'arcu', 'quam.', 'urna.', 'maximus', 'accumsan.', 'Phasellus', 'nulla']
+]
+
+# ===============================================
+# ================= black magic =================
+input_lines = [[f'{var_name} = "{inp}"'] for inp in test_cases]
+for i, input_line in enumerate(input_lines):
+    program = '\n'.join(input_line + user_solution)
+    with Check.input(input_line):
+        Check.output(program, [
+            str(solutions[i])
+        ])
+# ===============================================
 
 
 # # =====================================================================@000000=
@@ -556,7 +606,7 @@ def extract_problem(filename):
         'solution': match.group('solution').strip(),
         'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
-        'problem': 12309
+        'problem': 12311
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
         r'^\s*# =+\s*\n'                          # beginning of header
@@ -568,7 +618,7 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': 12309,
+        'id': 12311,
         'problem_set': 2540
     }
 
