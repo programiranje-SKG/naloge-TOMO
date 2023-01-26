@@ -7,67 +7,190 @@ Check.initialize(problem['parts'])
 # =============================================================================
 # Delitelji
 # =====================================================================@032893=
-# Napiši funkcijo `delitelji(stevilo)`, ki vrne seznam vseh deliteljev podanega števila.
+# Napiši program, ki izpiše seznam vseh deliteljev podanega števila. Podatki bodo
+# podani v prvi vrstici v spremenljivki `stevilo`:
 # 
-#     >>> delitelji(12345)
+#     stevilo = 12345
+# 
+# Izhod naj bo seznam deliteljev:
+# 
 #     [1, 3, 5, 15, 823, 2469, 4115, 12345]
+# -----------------------------------------------------------------------------
+# stevilo = 12345
 # =============================================================================
-def delitelji(stevilo):
-    seznam_del = []
-    for i in range(1, stevilo + 1):
-        if stevilo % i == 0:
-            seznam_del.append(i)
-    return seznam_del
+stevilo = 19
+seznam_del = []
+for i in range(1, stevilo + 1):
+    if stevilo % i == 0:
+        seznam_del.append(i)
+print(seznam_del)
 
 Check.part()
-Check.equal('delitelji(12345)', [1, 3, 5, 15, 823, 2469, 4115, 12345])
-Check.equal('delitelji(1)', [1])
-Check.equal('delitelji(10)', [1, 2, 5, 10])
-Check.equal('delitelji(19)', [1, 19])
+resitev = Check.current_part['solution'].split('\n')
+sez_str = resitev[0]
+if 'stevilo=' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko stevilo.\n"
+                "Na primer:\n"
+                'stevilo = 12345')
+program = resitev[1:]
+
+
+# ===============================================
+# ================ Test cases ===================
+def first_line(test):
+    return "stevilo = " + str(test)
+
+
+# test cases
+
+
+test_cases = [12345, 1, 10, 19]
+
+solutions = [
+    [1, 3, 5, 15, 823, 2469, 4115, 12345],
+    [1],
+    [1,2,5,10],
+    [1,19]
+]
+
+# ===============================================
+# ================= black magic =================
+
+for i, test_case in enumerate(test_cases):
+    input_line = first_line(test_case)
+
+    # replace first line in solution
+    Check.current_part['solution'] = "\n".join([input_line] + Check.current_part['solution'].split('\n')[1:])
+    # add first line as declaration of list
+    test_program = [input_line] + program
+    Check.run(test_program, dict())
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
+# ===============================================
 
 
 # =====================================================================@032894=
-# Napiši funkcijo `vsota_deliteljev(n)`, ki vrne vsoto deliteljev podanega števila. Med delitelji
+# Napiši program, ki vrne vsoto deliteljev podanega števila. Med delitelji
 # naj bo tudi 1, ne pa število samo. Vsota deliteljev 12 je tako 1 + 2 + 3 + 4 + 6 = 16.
+# Podatki bodo podani v prvi vrstici v spremenljivki `stevilo`:
 # 
-#     >>> vsota_deliteljev(12)
+#     stevilo = 12345
+# 
+# Izhod naj bo vsota deliteljev:
+# 
 #     16
+# -----------------------------------------------------------------------------
+# stevilo = 12345
 # =============================================================================
-def vsota_deliteljev(n):
-    v = 0
-    for i in range(1, n):
-        if n % i == 0:
-            v += i
-    return v
+stevilo = 13
+v = 0
+for i in range(1, stevilo):
+    if stevilo % i == 0:
+        v += i
+print(v)
 
 Check.part()
-Check.equal('vsota_deliteljev(12)', 16)
-Check.equal('vsota_deliteljev(42)', 54)
-Check.equal('vsota_deliteljev(100)', 117)
-Check.equal('vsota_deliteljev(13)', 1)
+resitev = Check.current_part['solution'].split('\n')
+sez_str = resitev[0]
+if 'stevilo=' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko stevilo.\n"
+                "Na primer:\n"
+                'stevilo = 12345')
+program = resitev[1:]
+
+
+# ===============================================
+# ================ Test cases ===================
+def first_line(test):
+    return "stevilo = " + str(test)
+
+
+# test cases
+
+
+test_cases = [12, 42, 100, 13]
+
+solutions = [16, 54, 117, 1]
+
+# ===============================================
+# ================= black magic =================
+
+for i, test_case in enumerate(test_cases):
+    input_line = first_line(test_case)
+
+    # replace first line in solution
+    Check.current_part['solution'] = "\n".join([input_line] + Check.current_part['solution'].split('\n')[1:])
+    # add first line as declaration of list
+    test_program = [input_line] + program
+    Check.run(test_program, dict())
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
+# ===============================================
 
 
 # =====================================================================@032895=
-# Napiši funkcijo `prastevilo(n)`, ki vrne `True`, če je podano število praštevilo in `False`, če ni.
+# Napiši program, ki vrne `True`, če je podano število praštevilo in `False`, če ni.
+# Podatki bodo podani v prvi vrstici v spremenljivki `stevilo`:
 # 
-#     >>> prastevilo(10)
-#     False
-#     >>> prastevilo(13)
+#     stevilo = 13
+# 
+# Izhod pove, če je število praštevilo:
+# 
 #     True
+# -----------------------------------------------------------------------------
+# stevilo = 13
 # =============================================================================
-def prastevilo(n):
-    for i in range(2, n):
-        if n % i == 0:
-            return False
-    return True
+stevilo = 7919
+for i in range(2, stevilo):
+    if stevilo % i == 0:
+        print(False)
+        break
+else:
+    print(True)
 
 Check.part()
-Check.equal('prastevilo(10)', False)
-Check.equal('prastevilo(13)', True)
-Check.equal('prastevilo(17)', True)
-Check.equal('prastevilo(100)', False)
-Check.equal('prastevilo(42)', False)
-Check.equal('prastevilo(7919)', True)
+resitev = Check.current_part['solution'].split('\n')
+sez_str = resitev[0]
+if 'stevilo=' not in sez_str.replace(" ", ""):
+    Check.error("Prva vrstica programa mora biti deklariacija seznama, ki ga shraniš v spremenljivko stevilo.\n"
+                "Na primer:\n"
+                'stevilo = 12345')
+program = resitev[1:]
+
+
+# ===============================================
+# ================ Test cases ===================
+def first_line(test):
+    return "stevilo = " + str(test)
+
+
+# test cases
+
+
+test_cases = [10, 13, 17, 100, 42, 7919]
+
+solutions = [False, True, True, False, False, True]
+
+# ===============================================
+# ================= black magic =================
+
+for i, test_case in enumerate(test_cases):
+    input_line = first_line(test_case)
+
+    # replace first line in solution
+    Check.current_part['solution'] = "\n".join([input_line] + Check.current_part['solution'].split('\n')[1:])
+    # add first line as declaration of list
+    test_program = [input_line] + program
+    Check.run(test_program, dict())
+    with Check.input([input_line]):
+        Check.output(Check.current_part['solution'], [
+            str(solutions[i])
+        ])
+# ===============================================
 
 
 # # =====================================================================@000000=

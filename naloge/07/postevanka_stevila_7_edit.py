@@ -7,7 +7,7 @@ Check.initialize(problem['parts'])
 # =============================================================================
 # Poštevanka števila 7
 # =====================================================================@032896=
-# Napiši funkcijo `vsebuje_7(n)`, ki vrne `True`, če število vsebuje števko 7.
+# Napiši program, ki vrne `True`, če število vsebuje števko 7.
 # 
 #     >>> vsebuje_7(1234)
 #     False
